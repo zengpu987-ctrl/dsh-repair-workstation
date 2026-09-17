@@ -1,0 +1,71 @@
+{
+  "name": "dsh-repair-workstation",
+  "version": "0.1.0",
+  "description": "DeepSeek Harness (DSH) problem and bug repair workstation for macOS and Windows.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack:mac": "electron-builder --mac dir",
+    "dist:mac": "electron-builder --mac dmg zip",
+    "pack:win": "electron-builder --win portable",
+    "dist:win": "electron-builder --win nsis zip",
+    "pack": "electron-builder --mac dir --win portable"
+  },
+  "keywords": [
+    "deepseek",
+    "harness",
+    "dsh",
+    "repair",
+    "troubleshooting",
+    "forum",
+    "electron"
+  ],
+  "author": "zengpu987-ctrl",
+  "license": "MIT",
+  "build": {
+    "appId": "com.dsh.repair.workstation",
+    "productName": "DSH Repair Workstation",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "renderer/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        "dir",
+        "dmg",
+        "zip"
+      ],
+      "icon": "assets/icon.icns",
+      "darkModeSupport": true
+    },
+    "win": {
+      "target": [
+        "portable",
+        "nsis",
+        "zip"
+      ],
+      "icon": "assets/icon.png",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    }
+  },
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12"
+  }
+}
