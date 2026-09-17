@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSH Repair Workstation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">DSH</span>
+        <span>Repair Workstation</span>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <button class="nav-item active" data-view="overview">
+          <span class="nav-icon">◎</span><span>状态概览</span>
+        </button>
+        <button class="nav-item" data-view="forum">
+          <span class="nav-icon">▤</span><span>问题论坛</span>
+        </button>
+        <button class="nav-item" data-view="packages">
+          <span class="nav-icon">⬇</span><span>修复包区</span>
+        </button>
+        <button class="nav-item" data-view="repair-box">
+          <span class="nav-icon">▣</span><span>内部修复箱</span>
+        </button>
+        <button class="nav-item" data-view="reset">
+          <span class="nav-icon">↺</span><span>DSH 重置</span>
+        </button>
+        <button class="nav-item" data-view="settings">
+          <span class="nav-icon">⚙</span><span>设置</span>
+        </button>
+      </nav>
+      <div class="sidebar-foot">
+        <button class="ghost-button" data-action="open-repo">GitHub 仓库</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="page-title">状态概览</h1>
+          <p id="page-subtitle">DeepSeek Harness 问题与修复工作站</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="secondary-button" data-action="refresh-system">刷新检测</button>
+          <button class="primary-button" data-action="open-deepseek">打开 Harness</button>
+        </div>
+      </header>
+
+      <section id="view-overview" class="view active">
+        <div class="card-grid">
+          <article class="metric-card">
+            <span class="metric-label">平台</span>
+            <strong id="metric-platform">检测中</strong>
+            <span id="metric-arch"></span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">DSH 命令</span>
+            <strong id="metric-dsh">检测中</strong>
+            <span id="metric-version"></span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">桌面 APP</span>
+            <strong id="metric-app">检测中</strong>
+            <span id="metric-app-path"></span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">插件市场</span>
+            <strong id="metric-market">检测中</strong>
+            <span id="metric-market-region"></span>
+          </article>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>快速自检</h2>
+            <button class="secondary-button" data-tool="self-check">运行完整自检</button>
+          </div>
+          <div id="overview-checks" class="check-list"></div>
+        </div>
+
+        <div class="quick-actions">
+          <button class="action-tile" data-tool="freeze">
+            <strong>卡死修复</strong>
+            <span>停止僵死进程、清理实例锁</span>
+          </button>
+          <button class="action-tile" data-tool="startup">
+            <strong>无法启动自检与修复</strong>
+            <span>重建依赖、修复权限和目录</span>
+          </button>
+          <button class="action-tile" data-view-jump="repair-box">
+            <strong>内部文件修复箱</strong>
+            <span>检查 APP 包和内部文件</span>
+          </button>
+          <button class="action-tile" data-view-jump="reset">
+            <strong>DSH 重置</strong>
+            <span>备份并重置配置、缓存、会话</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="view-forum" class="view">
+        <div class="forum-toolbar">
+          <input id="forum-search" class="text-input" type="search" placeholder="搜索问题标题或描述">
+          <button class="primary-button" data-action="new-issue">发布问题</button>
+        </div>
+        <div class="forum-layout">
+          <div class="forum-list-wrap">
+            <div class="forum-list-head">
+              <h2>社区问题</h2>
+              <span id="forum-count" class="muted"></span>
+            </div>
+            <div id="forum-list" class="forum-list"></div>
+          </div>
+          <div class="forum-detail-wrap">
+            <div id="forum-detail" class="forum-detail">
+              <div class="empty-state">选择一个问题查看讨论和解决方案。</div>
+            </div>
+          </div>
+        </div>
+
+        <dialog id="new-issue-dialog" class="dialog">
+          <form id="new-issue-form" method="dialog">
+            <h2>发布问题</h2>
+            <label>标题<input name="title" class="text-input" required placeholder="例如：DeepSeek Harness 启动后一直转圈"></label>
+            <label>问题描述
+              <textarea name="body" class="textarea" rows="8" placeholder="描述系统版本、复现步骤、日志或截图链接。可使用 Markdown 和代码块。"></textarea>
+            </label>
+            <div class="dialog-actions">
+              <button type="button" class="secondary-button" data-close-dialog>取消</button>
+              <button type="submit" class="primary-button">发布到 GitHub Issues</button>
+            </div>
+          </form>
+        </dialog>
+      </section>
+
+      <section id="view-packages" class="view">
+        <div class="section-intro">
+          <h2>修复包区</h2>
+          <p>下载安装包，或运行针对常见故障的一键修复。网友也可以在这里补充解决方案和程序代码。</p>
+        </div>
+        <div class="package-grid">
+          <article class="package-card">
+            <div class="package-title"><span>桌面版 APP</span><small>macOS / Windows</small></div>
+            <p>生成当前机器的 DeepSeek Harness 安装包，或打开官方下载页。</p>
+            <div class="package-actions">
+              <button class="secondary-button" data-action="make-installer">生成 macOS 安装包</button>
+              <button class="secondary-button" data-action="open-official">官方下载页</button>
+            </div>
+          </article>
+          <article class="package-card">
+            <div class="package-title"><span>DeepSeek 卡死修复</span><small>Freeze Repair</small></div>
+            <p>停止僵死进程、清理旧实例状态和启动锁，并恢复插件市场区域。</p>
+            <button class="primary-button" data-tool="freeze">运行卡死修复</button>
+          </article>
+          <article class="package-card">
+            <div class="package-title"><span>无法启动自检与修复</span><small>Startup Repair</small></div>
+            <p>检查 DSH CLI、Web Profile、依赖、权限和日志，自动执行基础修复。</p>
+            <button class="primary-button" data-tool="startup">运行启动修复</button>
+          </article>
+          <article class="package-card">
+            <div class="package-title"><span>内部文件修复箱</span><small>Internal Files</small></div>
+            <p>检查 APP 包、支持目录、配置文件、日志和插件市场状态。</p>
+            <button class="primary-button" data-view-jump="repair-box">打开修复箱</button>
+          </article>
+          <article class="package-card">
+            <div class="package-title"><span>DSH 重置工具</span><small>Reset Tool</small></div>
+            <p>备份后重置 Web Profile、会话、缓存、附件、插件市场或全部数据。</p>
+            <button class="primary-button" data-view-jump="reset">打开重置工具</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-repair-box" class="view">
+        <div class="section-intro">
+          <h2>内部文件修复箱</h2>
+          <p>针对 DeepSeek Harness.app 与用户数据目录的完整性检查和修复。</p>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>修复动作</h2>
+          </div>
+          <div class="repair-actions">
+            <button class="secondary-button" data-tool="self-check">完整自检</button>
+            <button class="secondary-button" data-tool="startup">启动修复</button>
+            <button class="primary-button" data-tool="internal-files">执行内部文件修复</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>修复日志</h2>
+            <button class="secondary-button" data-action="copy-log">复制日志</button>
+          </div>
+          <pre id="repair-output" class="log-output">尚未运行修复工具。</pre>
+        </div>
+      </section>
+
+      <section id="view-reset" class="view">
+        <div class="section-intro">
+          <h2>DSH 重置工具</h2>
+          <p>所有重置操作都会先备份到用户目录。建议先关闭正在运行的 Harness 会话。</p>
+        </div>
+        <div class="panel">
+          <h2>重置范围</h2>
+          <div class="reset-options">
+            <label><input type="checkbox" data-reset="settings" checked>全局设置</label>
+            <label><input type="checkbox" data-reset="credentials">凭据 / API Key</label>
+            <label><input type="checkbox" data-reset="webProfile" checked>Web Profile</label>
+            <label><input type="checkbox" data-reset="sessions" checked>会话记录</label>
+            <label><input type="checkbox" data-reset="caches" checked>投影缓存</label>
+            <label><input type="checkbox" data-reset="attachments" checked>附件</label>
+            <label><input type="checkbox" data-reset="market" checked>插件市场状态</label>
+            <label class="danger-option"><input type="checkbox" data-reset="fullReset">全量重置整个 ~/.dsh</label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="reset-confirm">
+            <label>确认短语：输入 <code>RESET DSH</code> 后执行</label>
+            <input id="reset-confirm" class="text-input" placeholder="RESET DSH">
+            <button class="danger-button" data-action="run-reset">执行安全重置</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>重置日志</h2>
+            <button class="secondary-button" data-action="copy-reset-log">复制日志</button>
+          </div>
+          <pre id="reset-output" class="log-output">尚未执行重置。</pre>
+        </div>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="panel">
+          <h2>GitHub 论坛同步</h2>
+          <p class="muted">问题论坛使用 GitHub Issues 作为公开数据源。读取公开问题无需登录；发布问题和回复需要 GitHub Token。</p>
+          <label>仓库
+            <input id="setting-repo" class="text-input" placeholder="owner/repository">
+          </label>
+          <label>GitHub Token
+            <input id="setting-token" class="text-input" type="password" placeholder="ghp_... 或留空使用系统凭据">
+          </label>
+          <div class="dialog-actions">
+            <button class="primary-button" data-action="save-settings">保存设置</button>
+            <button class="secondary-button" data-action="open-repo">打开仓库</button>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>DSH Repair Workstation · MIT License</span>
+        <span id="footer-status" class="muted"></span>
+      </footer>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
